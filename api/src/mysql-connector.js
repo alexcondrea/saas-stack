@@ -7,10 +7,8 @@ import fastifyMySQL from '@fastify/mysql'
  */
 async function dbConnector (fastify, options) {
   fastify.register(fastifyMySQL, {
-    host: 'db',
-    user: 'root',
-    password: 'root',
-    database: 'saas'
+    promise: true,
+    connectionString: 'mysql://root:root@db/saas'
   })
 }
 

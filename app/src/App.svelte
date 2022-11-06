@@ -2,11 +2,15 @@
   import svelteLogo from './assets/svelte.svg'
   import Counter from './lib/Counter.svelte'
 
-  let apiStatus
+  let apiStatus, appName
 
   fetch('/api/health')
   .then(res => res.text())
   .then(status => apiStatus = status)
+
+  fetch('/api/info')
+  .then(res => res.json())
+  .then(infos => appName = infos.find(info =>  info.type === 'app_name').value)
 </script>
 
 <main>
@@ -21,9 +25,8 @@
     <Counter />
   </div>
 
-  <p>
-    This is a starting svelte app for your SaaS business :)
-  </p>
+  <p>This is a starting svelte app for your</p>
+  <h2><strong>{appName}</strong></h2>
 
   <p class="read-the-docs">
     Click on the Svelte logo to find some documentation
