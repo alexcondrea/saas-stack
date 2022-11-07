@@ -15,27 +15,12 @@ services:
     environment:
       NGINX_DOMAIN_NAME: ${NGINX_DOMAIN_NAME}
     depends_on:
-      - api
       - app
 #  certbot:
 #    image: certbot/certbot
 #    volumes:
 #      - ./certbot/www:/var/www/certbot:rw
 #      - ./certbot/conf/:/etc/letsencrypt/:rw
-  api:
-    container_name: saas_api
-    image: node:lts
-    working_dir: /app
-    command: bash -c "npm install && npm start"
-    restart: always
-    expose:
-      - 80
-    volumes:
-      - ./api:/app
-    environment:
-      SECRET_API_KEY: ${SECRET_API_KEY}
-    depends_on:
-      - db
   app:
     container_name: saas_app
     image: node:lts
@@ -46,14 +31,6 @@ services:
     restart: always
     volumes:
       - ./app:/app
-  marketing:
-    container_name: saas_marketing
-    image: nginx:alpine
-    restart: unless-stopped
-    expose:
-      - 80
-    volumes:
-      - ./marketing:/usr/share/nginx/html:ro
   db:
     container_name: saas_db
     image: mysql
@@ -70,16 +47,5 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: saas
       LANG: C.UTF-8
-  phpmyadmin:
-    image: phpmyadmin
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    links:
-      - db:db
-    environment:
-      - PMA_HOSTS=db
-      - PMA_USER=root
-      - PMA_PASSWORD=root
 volumes:
   db_data: { }
